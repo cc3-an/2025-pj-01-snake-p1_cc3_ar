@@ -1,4 +1,4 @@
-#include "state.h"
+#include "state.h"    
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -21,11 +21,61 @@ static char next_square(game_state_t* state, unsigned int snum);
 static void update_tail(game_state_t* state, unsigned int snum);
 static void update_head(game_state_t* state, unsigned int snum);
 
+
 /* Tarea 1 */
-game_state_t* create_default_state() {
-  // TODO: Implementar esta funcion.
-  return NULL;
+game_state_t* create_default_state() { /*voy a devolver un puntero que apunta a una estructura de tipo game_state_t, esta estructura será el juego por defecto entonces voy a inicializar cada elemento de las estructuras game_state_t y snake_t para que formen el juego de la imagen de la tarea1 :)    */
+
+
+
+// crea espacio en el heap para snake_T  y game_state_t 
+  
+	game_state_t *defoult_state = calloc(1,sizeof(game_state_t));   
+	snake_t *defoult_snake = calloc(1,sizeof(snake_t)); 
+  
+  //inicializar cada elemento de las estructuras
+  // game_state:
+  
+ 	defoult_state -> num_rows = 18;                                       //18 filas del tablero
+  	defoult_state -> num_snakes = 1 ;
+  	defoult_state -> snakes = defoult_snake;
+  
+	defoult_state -> board = calloc(defoult_state->num_rows, sizeof(char*));  //se reserva espacio en el heap para el arreglo 
+ 
+        
+  	int f;
+	for (f = 0; f <= 17; f++) {  //for para reservar espacio para cada fila y asignar los punteros al arreglo board
+   
+    		defoult_state -> board[f] = malloc(21 * sizeof(char));   //por los 20 chars + caracter nulo  "\0"
+    		
+    		if (f == 0 || f == 17) {
+        		strcpy(defoult_state -> board[f],"####################");
+   		} else if (f == 2) {
+        		strcpy(defoult_state -> board[f],"# d>D    *         #");
+    		} else {
+        		strcpy(defoult_state -> board[f],"#                  #");
+    		}
 }
+
+
+/* arriba se aparto espacio para el arreglo de punteros, calloc aparto 18 espacios del tamaño de un puntero de tipo char (32bits)
+   y devolvio el valor de la primera dirección de ese arreglo a board, a continución en el for en cada iteración del mismo se aparta un espacio en memoria de 21 chars la dirección del primer char se guarda en board[f] que es el arreglo en la posición f así se va llenando el arreglo de punteros. Apartado el espacio para la fila se van llenando los 21 caracteres con strcpy dependiendo de la fila se escoge dentro del condicional if para poder llenar con los caracteres respectivos de ese numero de fila para el tablero o board por defoult */
+   
+   
+
+ 
+  //snake_t:
+  
+  defoult_snake -> tail_row = 2;
+  defoult_snake -> tail_col  = 2;
+  defoult_snake -> head_row = 2;
+  defoult_snake -> head_col = 4;
+  defoult_snake -> live = true ;  
+  
+  return defoult_state;
+}
+
+
+
 
 
 /* Tarea 2 */
