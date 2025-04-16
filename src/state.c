@@ -71,18 +71,54 @@ game_state_t* create_default_state() { /*voy a devolver un puntero que apunta a 
   defoult_snake -> head_col = 4;
   defoult_snake -> live = true ;  
   
-  return defoult_state;
+  return defoult_state;  //devuelvo el puntero a mi  juego por defecto que es de tipo defoult_state;
 }
+
+
 
 
 
 
 
 /* Tarea 2 */
-void free_state(game_state_t* state) {
-  // TODO: Implementar esta funcion.
+void free_state(game_state_t* state) {   //a liberar todo lo que reserve en la tarea 1, de dentro hacia afuera
+
+      unsigned int num_rowsToFree = state -> num_rows;
+
+ 
+     int f;
+     for (f = 0; f < num_rowsToFree; f++) {           //libero cada fila que reserve con malloc
+          free(state -> board[f]);
+     }
+     
+     free(state -> board);                //libero el arreglo de punteros
+     
+     free(state ->snakes );               //libero el espacio de memoria reservado para la estrcutura snake_t
+     
+     free(state);                         //libero la estructura completa de state, todo lo demás que tenía	
   return;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* Tarea 3 */
