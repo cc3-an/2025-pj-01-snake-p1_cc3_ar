@@ -83,7 +83,7 @@ game_state_t* create_default_state() { /*voy a devolver un puntero que apunta a 
 /* Tarea 2 */
 void free_state(game_state_t* state) {   //a liberar todo lo que reserve en la tarea 1, de dentro hacia afuera
 
-      unsigned int num_rowsToFree = state -> num_rows;
+     unsigned int num_rowsToFree = state -> num_rows;
 
  
      int f;
@@ -122,10 +122,28 @@ void free_state(game_state_t* state) {   //a liberar todo lo que reserve en la t
 
 
 /* Tarea 3 */
-void print_board(game_state_t* state, FILE* fp) {
-  // TODO: Implementar esta funcion.
+void print_board(game_state_t* state, FILE* fp) {  //como argumentos un puntero "stare" a una estructura de tipo game_state_t y un puntero "fp" a un archivo en el cual se debe imprimir el tablero
+
+	unsigned int num_rowsToPrint = state -> num_rows;
+	
+	int p;
+	for(p = 0; p < num_rowsToPrint; p++){
+	
+        	fprintf(fp, "%s\n", state -> board[p]);              //en el archivo fp imprimir board[p] "cada fila" 
+	}
+	
+  
   return;
 }
+
+
+
+
+
+
+
+
+
 
 
 /**
