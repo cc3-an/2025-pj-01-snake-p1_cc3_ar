@@ -315,8 +315,24 @@ static unsigned int get_next_col(unsigned int cur_col, char c) {
  * Esta funcion no deberia modificar nada de state.
 */
 static char next_square(game_state_t* state, unsigned int snum) {
-  // TODO: Implementar esta funcion.
-  return '?';
+  //state es el puntero a la estructura state, snum es el numero de serpiente en el arreglo snake_t, en state existe un puntero a este arrelo de estructuras llamado snakes (snake_t *snakes: Un arreglo de estructuras snake_t.)
+         
+        //voy a el elemento de snakes[snum] en la posicion snum y dentro de la estrucuta snake veo la fila y columna de la cabeza
+  	unsigned int head_row = state->snakes[snum].head_row;
+        unsigned int head_col = state->snakes[snum].head_col;
+        
+        
+        //ya tengo la fila y columna  ahora voy a leer lo que hay en la interseccion de ambas usando la funcion que nos dieron
+        char head_char = get_board_at(state,head_row, head_col);
+        
+        //obtengo mi la siguiente fila y columna apartir del elemento de la cabeza
+        unsigned int next_row = get_next_row(head_row, head_char);  //fila, elemento
+        unsigned int next_col = get_next_col(head_col, head_char);  //fila, columna
+        
+        //uso nuevamente la función proporcionada para leer lo que hay en la siguiente posicion 
+        char next_square = get_board_at(state, next_row, next_col);
+        
+  return next_square;
 }
 
 
