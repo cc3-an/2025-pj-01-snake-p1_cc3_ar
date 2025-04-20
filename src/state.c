@@ -156,6 +156,9 @@ void save_board(game_state_t* state, char* filename) {
   fclose(f);
 }
 
+
+
+
 /* Tarea 4.1 */
 
 
@@ -184,8 +187,12 @@ static void set_board_at(game_state_t* state, unsigned int row, unsigned int col
  * Retorna false de lo contrario.
 */
 static bool is_tail(char c) {
-  // TODO: Implementar esta funcion.
-  return true;
+	  if(c == 'w' || c == 'a' || c=='s' || c == 'd'){
+	  	 return true;
+	  }else{
+	  	return false;
+	  }
+  
 }
 
 
@@ -195,8 +202,12 @@ static bool is_tail(char c) {
  * Retorna false de lo contrario.
 */
 static bool is_head(char c) {
-  // TODO: Implementar esta funcion.
-  return true;
+	  if(c == 'W' || c == 'A' || c == 'S' || c == 'D'){
+	  	 return true;
+	  }else{
+	  	return false;
+	  }
+  
 }
 
 
@@ -205,8 +216,11 @@ static bool is_head(char c) {
  * Una snake consiste de los siguientes caracteres: "wasd^<v>WASDx"
 */
 static bool is_snake(char c) {
-  // TODO: Implementar esta funcion.
-  return true;
+	   if(c == 'W' || c == 'A' || c == 'S' || c == 'D' || c == 'w' || c == 'a' || c == 's' || c == 'd' ||c == '<' || c == '>' || c == '^' || c == 'v' ){
+  	        return true;
+           }else{
+  	        return false;
+           }
 }
 
 
@@ -216,8 +230,13 @@ static bool is_snake(char c) {
  * snake ("wasd").
 */
 static char body_to_tail(char c) {
-  // TODO: Implementar esta funcion.
-  return '?';
+	   switch (c) {
+		case '<': return 'a';
+		case '>': return 'd';
+		case '^': return 'w';
+		case 'v': return 's';
+		default:  return '?';
+	    }
 }
 
 
@@ -227,8 +246,14 @@ static char body_to_tail(char c) {
  * ("^<v>").
 */
 static char head_to_body(char c) {
-  // TODO: Implementar esta funcion.
-  return '?';
+	switch (c) {
+		case 'A': return '<';
+		case 'D': return '>';
+		case 'W': return '^';
+		case 'S': return 'v';
+		default:  return '?';
+	    }
+	  
 }
 
 
@@ -238,8 +263,16 @@ static char head_to_body(char c) {
  * Retorna cur_row de lo contrario
 */
 static unsigned int get_next_row(unsigned int cur_row, char c) {
-  // TODO: Implementar esta funcion.
-  return cur_row;
+
+       
+		if (c == 'v' || c == 's' || c=='S' ){
+	  	 	return cur_row + 1 ;
+		} else if (c == '^' || c == 'w' || c=='W'){
+	  		return (cur_row > 0 ) ? cur_row - 1  :0 ; // si en caso la fila actual sea 0 no se podra hacer 0-1 se quedará en la fila 0
+		} else {
+	      		return cur_row;
+		}
+	
 }
 
 
@@ -249,9 +282,28 @@ static unsigned int get_next_row(unsigned int cur_row, char c) {
  * Retorna cur_col de lo contrario
 */
 static unsigned int get_next_col(unsigned int cur_col, char c) {
-  // TODO: Implementar esta funcion.
+	if (c == '>' || c == 'd' || c=='D'){
+	  	 return cur_col + 1 ;
+	} else if (c == '<' || c == 'a' || c =='A'){
+	  	return cur_col - 1;
+	} else {
+	      	return cur_col;
+	}
   return cur_col;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /**
