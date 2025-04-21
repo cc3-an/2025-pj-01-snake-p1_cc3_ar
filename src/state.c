@@ -349,7 +349,33 @@ static char next_square(game_state_t* state, unsigned int snum) {
  * cuando se mueve la cabeza.
 */
 static void update_head(game_state_t* state, unsigned int snum) {
-  // TODO: Implementar esta funcion.
+   //la primera parte como la de arriba... a buscar primero el numero de la fila y columan donde este la snake No.snum
+  	unsigned int head_row = state->snakes[snum].head_row;
+        unsigned int head_col = state->snakes[snum].head_col;
+        
+        char head_char = get_board_at(state,head_row, head_col); //leo el caracter que guarda la interseccion de la fila y columna
+        
+        //siguiente posición
+        unsigned int next_row = get_next_row(head_row, head_char);  
+        unsigned int next_col = get_next_col(head_col, head_char);
+        
+        
+        
+        //convierto la cabeza en una parte del cuerpo 
+         char body_char = head_to_body(head_char); 
+         
+         
+         set_board_at(state, head_row, head_col,body_char); //donde estaba la cabeza se coloca un caracter de cuerpo correspondiente
+         set_board_at(state, next_row, next_col,head_char); //cabeza se mueve a la siguiente posción en el tablero
+         
+         
+         
+    
+        //actualizar la estructura snake con la nueva fila y columna
+        state->snakes[snum].head_row = next_row;
+        state->snakes[snum].head_col = next_col;
+        
+           
   return;
 }
 
@@ -366,14 +392,68 @@ static void update_head(game_state_t* state, unsigned int snum) {
  * ...en la estructura snake: actualizar el row y col de la cola
 */
 static void update_tail(game_state_t* state, unsigned int snum) {
-  // TODO: Implementar esta funcion.
+
+   
+   //posción donde se encuentra la cola actualemente 
+        unsigned int tail_row = state->snakes[snum].tail_row;
+        unsigned int tail_col = state->snakes[snum].tail_col;
+        
+   //obtengo el caracter de la cola en
+        char tail_char = get_board_at(state,tail_row, tail_col);
+        
+   
+   //coloco espacio en blanco
+   set_board_at(state,tail_row,tail_col,' ');
+   
+   //siguiente posición 
+   
+   unsigned int next_row = get_next_row(tail_row, tail_char);  
+   unsigned int next_col = get_next_col(tail_col, tail_char);
+   
+   //leer lo que hay en la siguiente posición y guardarlo en un char
+   char body_char = get_board_at(state, next_row, next_col);
+   
+   //cambiar de body a tail 
+   char next_tail = body_to_tail(body_char);
+   
+   //ya teniendo la nueva cola la colocamos en la posición siguiente que se habia obtenido con la función dada
+   set_board_at(state,next_row,next_col,next_tail);
+    
+   //a actualizar la estructura
+   state->snakes[snum].tail_row = next_row;
+   state->snakes[snum].tail_col = next_col;
+    
   return;
 }
 
+
 /* Tarea 4.5 */
 void update_state(game_state_t* state, int (*add_food)(game_state_t* state)) {
-  // TODO: Implementar esta funcion.
-  return;
+   int i;
+   int snakes = state->num_snakes;
+
+    for (i = 0; i < snakes; i++) {
+        if (state->snakes[i].live) {
+
+            char next_char = next_square(state, i);
+
+            if (next_char == '#' || is_snake(next_char)) {
+                unsigned int head_row = state->snakes[i].head_row;
+                unsigned int head_col = state->snakes[i].head_col;
+                set_board_at(state, head_row, head_col, 'x');
+                state->snakes[i].live = false;
+
+            } else if (next_char == '*') {
+                update_head(state, i);
+                add_food(state);
+
+            } else if (next_char == ' ') {
+                update_head(state, i);
+                update_tail(state, i);
+            }
+        }
+    }
+    return;
 }
 
 /* Tarea 5 */
