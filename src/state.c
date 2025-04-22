@@ -510,9 +510,46 @@ game_state_t* load_board(char* filename) {
  * dada por la variable (snum)
 */
 static void find_head(game_state_t* state, unsigned int snum) {
-  // TODO: Implementar esta funcion.
+
+  
+  	//me debo mover a la serpiente No.snum del arreglo al que apunta *snakes el cual esta en la estructura state entonces...
+  	snake_t actualSnake = state -> snakes[snum];    //aqui ya tengo un puntero a la serpiente 
+  	
+  	unsigned int actual_row = actualSnake.tail_row; 
+  	unsigned int actual_col = actualSnake.tail_col;     //ya tengo la fila y columna de la cola se la snake
+  	
+  	//parados desde la posción actual dependiendo de lo que este en ella se toma la decisionde hacia donde será el siguiente paso osea me paro leo lo que esta en esta posicion y dependiendo de ello tomo la siguiente decisión  entonces...
+  	
+  	
+  	//con la función que nos dieron 
+  	
+  	char actual_char = false;             //porque de por si la primera posición es la cola 
+  	unsigned int next_row;
+  	unsigned int next_col;
+  	
+  	
+	while (is_head(actual_char) == false){                              //mientras el caracter no sea cabeza avanzar y leer
+
+		next_row = get_next_row(actual_row ,actual_char);
+		next_col = get_next_col(actual_col,actual_char);
+		
+		//obtenidas las siguientes filas y columnas leo lo que esta dentro
+		actual_char = get_board_at(state,next_row,next_col);   //leo lo que esta en la poción actual
+		
+		//actualizo la fila y columna actual
+		
+		actual_row = next_row;
+		actual_col = next_col;
+	}
+  	
+  	//como encontre un cabeza ahora guardo el numero de fila y columna
+  	
+  	state->snakes[snum].head_row = actual_row;
+	state->snakes[snum].head_col = actual_col;
+   
   return;
 }
+
 
 /* Tarea 6.2 */
 game_state_t* initialize_snakes(game_state_t* state) {
