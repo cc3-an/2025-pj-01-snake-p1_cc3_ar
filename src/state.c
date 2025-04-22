@@ -484,6 +484,7 @@ game_state_t* load_board(char* filename) {
         strcpy(row, bufferRow);                                     //copiar en el puntero row lo que tiene bufferRow
 
         board = realloc(board, (num_rows + 1) * sizeof(char*));        //aparto memoria expansible para el arrelo de punteros
+        board[num_rows] = NULL;                                       // Termina con NULL así me ayuda en la función 6.1 pasa saber su tamaño ._.
         board[num_rows] = row;                                    // en el arreglo board en la posicion (num_rows) colocar el puntero row
         num_rows++; 
     } 
@@ -546,6 +547,17 @@ static void find_head(game_state_t* state, unsigned int snum) {
   	
   	state->snakes[snum].head_row = actual_row;
 	state->snakes[snum].head_col = actual_col;
+	
+	//ya que estamos cacpa voy a colocar que si el char de la cabeza es diferente de x que bool alive sea verdadero y si no falso
+
+	if(actual_char == 'x'|| actual_char == 'X'){
+	
+		state->snakes[snum].live = false;
+
+	}else{
+		state->snakes[snum].live = true;
+	
+	}
    
   return;
 }
@@ -553,6 +565,54 @@ static void find_head(game_state_t* state, unsigned int snum) {
 
 /* Tarea 6.2 */
 game_state_t* initialize_snakes(game_state_t* state) {
-  // TODO: Implementar esta funcion.
-  return NULL;
+
+
+        unsigned int num_snakes = 0; 
+        snake_t *snakes = NULL;  
+        size_t lengthrow;
+        char* row;  
+        unsigned int i;
+        unsigned int c;
+        unsigned int num_rows;
+        
+         num_rows = state-> num_rows;
+    
+        
+   
+        for(i = 0 ; i < num_rows ; i++){
+        
+        	row = state->board[i];
+        	lengthrow = strlen(row);
+        	
+        	for (c = 0; c < lengthrow; c++) {
+	    		if (is_tail(row[c])) {
+		
+				num_snakes++;
+
+				
+				snakes = realloc(snakes, num_snakes * sizeof(snake_t));
+
+				
+				snakes[num_snakes - 1].tail_row = i;
+				snakes[num_snakes - 1].tail_col = c;
+
+			
+				snakes[num_snakes - 1].head_row = 0;
+				snakes[num_snakes - 1].head_col = 0;
+
+				
+				find_head(state, num_snakes - 1);
+	    		}
+		}
+
+       	}     
+       
+       
+    
+       state->snakes = snakes;
+       state->num_snakes = num_snakes;
+       
+       
+       
+      return state;
 }
