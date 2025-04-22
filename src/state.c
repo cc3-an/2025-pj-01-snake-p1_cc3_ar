@@ -429,8 +429,8 @@ static void update_tail(game_state_t* state, unsigned int snum) {
 
 /* Tarea 4.5 */
 void update_state(game_state_t* state, int (*add_food)(game_state_t* state)) {
-   int i;
-   int snakes = state->num_snakes;
+   unsigned int i;
+   unsigned int snakes = state->num_snakes;
 
     for (i = 0; i < snakes; i++) {
         if (state->snakes[i].live) {
@@ -458,8 +458,45 @@ void update_state(game_state_t* state, int (*add_food)(game_state_t* state)) {
 
 /* Tarea 5 */
 game_state_t* load_board(char* filename) {
-  // TODO: Implementar esta funcion.
-  return NULL;
+  	
+   //abro mi archivo de los boards para lectura y null para que pare cuando ya no queda nada en el archivo
+    FILE* fboards = fopen(filename, "r");
+    if (fboards == NULL) {
+        return NULL;
+    }
+
+    char bufferRow[1024];                                //bufer temporal donde se va a ir guardando la fila leída
+    char** board = NULL;                                 //puntero a un arrelo de punteros a las filas crece a  medida que se lea la siguiente fila
+    
+    unsigned int num_rows = 0;
+
+    while (fgets(bufferRow, 1024, fboards) != NULL) {
+    
+        size_t length = strlen(bufferRow);//veo el tamaño de lo que se guardo en el bufferRow así luego se puede apartar memoria en el heap con el malloc 
+        
+        if (length > 0 && bufferRow[length - 1] == '\n') {
+	    bufferRow[length - 1] = '\0';
+	    length--;  
+        }
+        
+       
+        char* row = malloc((length + 1) * sizeof(char));
+        strcpy(row, bufferRow);                                     //copiar en el puntero row lo que tiene bufferRow
+
+        board = realloc(board, (num_rows + 1) * sizeof(char*));        //aparto memoria expansible para el arrelo de punteros
+        board[num_rows] = row;                                    // en el arreglo board en la posicion (num_rows) colocar el puntero row
+        num_rows++; 
+    } 
+
+    fclose(fboards); 
+
+    game_state_t *state = malloc(sizeof(game_state_t));
+    state->board = board;
+    state->num_rows = num_rows;
+    state->snakes = NULL;
+    state->num_snakes = 0;
+
+    return state; 
 }
 
 
