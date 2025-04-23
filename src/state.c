@@ -456,6 +456,8 @@ void update_state(game_state_t* state, int (*add_food)(game_state_t* state)) {
     return;
 }
 
+
+
 /* Tarea 5 */
 game_state_t* load_board(char* filename) {
   	
@@ -472,21 +474,24 @@ game_state_t* load_board(char* filename) {
 
     while (fgets(bufferRow, 1024, fboards) != NULL) {
     
-        size_t length = strlen(bufferRow);//veo el tamaño de lo que se guardo en el bufferRow así luego se puede apartar memoria en el heap con el malloc 
-        
-        if (length > 0 && bufferRow[length - 1] == '\n') {
-	    bufferRow[length - 1] = '\0';
-	    length--;  
-        }
-        
-       
-        char* row = malloc((length + 1) * sizeof(char));
-        strcpy(row, bufferRow);                                     //copiar en el puntero row lo que tiene bufferRow
+        size_t length = strlen(bufferRow);
 
-        board = realloc(board, (num_rows + 1) * sizeof(char*));        //aparto memoria expansible para el arrelo de punteros
-        board[num_rows] = NULL;                                       // Termina con NULL así me ayuda en la función 6.1 pasa saber su tamaño ._.
-        board[num_rows] = row;                                    // en el arreglo board en la posicion (num_rows) colocar el puntero row
-        num_rows++; 
+	    
+	    if (length > 0 && bufferRow[length - 1] == '\n') {
+		bufferRow[length - 1] = '\0';
+		length--;
+	    }
+
+	   
+	    char* row = malloc((length + 1) * sizeof(char));
+	    strcpy(row, bufferRow);
+
+	    
+	    board = realloc(board, (num_rows + 1) * sizeof(char*));
+	    board[num_rows] = row;  
+	    num_rows++; 
+        
+        
     } 
 
     fclose(fboards); 
@@ -524,7 +529,7 @@ static void find_head(game_state_t* state, unsigned int snum) {
   	
   	//con la función que nos dieron 
   	
-  	char actual_char = false;             //porque de por si la primera posición es la cola 
+  	char actual_char = get_board_at(state, actual_row, actual_col);
   	unsigned int next_row;
   	unsigned int next_col;
   	
@@ -600,7 +605,7 @@ game_state_t* initialize_snakes(game_state_t* state) {
 				snakes[num_snakes - 1].head_row = 0;
 				snakes[num_snakes - 1].head_col = 0;
 
-				
+				state->snakes = snakes; 
 				find_head(state, num_snakes - 1);
 	    		}
 		}
