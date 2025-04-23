@@ -27,30 +27,45 @@ int main(int argc, char* argv[]) {
 
   // NO MODIFIQUEN NADA ARRIBA DE ESTA LINEA.
 
-  /* Tarea 7 */
 
-  // Leer el tablero de un archivo, o crear un tablero por defecto.
-  if (in_filename != NULL) {
-    // TODO: cargar el tablero de in_filename
-    // TODO: Si el archivo no existe, retornar -1
-    // TODO: Despues llamar a initialize_snakes en el estado creado
-  } else {
-    // TODO: Cargar el estado por defecto.
-  }
+/* Tarea 7 */
 
-  // TODO: Actualizar el estado. Utilizar la funcion deterministic_food
-  // (esta ya ha sido creada en snakes_utils.h) para agregar comida al
-  // tablero)
+ // Leer el tablero de un archivo, o crear un tablero por defecto.
 
-  // Write updated board to file or stdout
-  // Escribir el tablero actualizado al archivo o stdout
-  if (out_filename != NULL) {
-    // TODO: Guardar el tablero en out_filename
-  } else {
-    // TODO: Imprimir el tablero a stdout
-  }
+ if (in_filename != NULL) {
+       // 1. Cargar el tablero desde el archivo
+ 	state = load_board(in_filename);
 
-  // TODO: Liberen el estado creado
+        // 2. Si no se pudo abrir el archivo, salir con código de error -1
+ 	if (state == NULL) {
+ 		return -1;
+	 }
+	 
+	 
+	// 3. Inicializar las serpientes
+ 	 initialize_snakes(state);
+ 	
+ 	
 
-  return 0;
+ } else {
+        // Si no hay archivo, cargar el tablero por defecto
+ 	 state = create_default_state();
+ }
+ 
+  update_state(state, deterministic_food);
+  
+
+ if (out_filename != NULL) {
+ 	FILE* out = fopen(out_filename, "w");
+ 	if (out != NULL) {
+ 	print_board(state, out);
+ 	fclose(out);
+ 	}
+ } else {
+ 
+	
+ }
+ free_state(state); 
+
+ return 0;
 }
